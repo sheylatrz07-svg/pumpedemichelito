@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Mi quinceañera</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Dancing+Script:wght@500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #eee3cc;
+    font-family: 'Playfair Display', serif;
+    overflow-x: hidden;
+}
+
+/* PORTADA */
+
+#inicio {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #fff9e9, #e8d8b9);
+    padding: 25px;
+    text-align: center;
+}
+
+.titulo {
+    color: #8e1017;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(38px, 9vw, 52px);
+    margin-bottom: 35px;
+}
+
+.sobre {
+    position: relative;
+    width: min(290px, 85vw);
+    height: 195px;
+    background: #c9ae7d;
+    border-radius: 4px;
+    box-shadow: 0 12px 25px #806b503d;
+    cursor: pointer;
+}
+
+.carta-interior {
+    position: absolute;
+    width: 85%;
+    height: 90%;
+    left: 7.5%;
+    bottom: 5px;
+    background: #fff8e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: transform 1s ease;
+    z-index: 1;
+    color: #86141a;
+}
+
+.carta-interior span {
+    font-family: 'Dancing Script', cursive;
+    font-size: 29px;
+}
+
+.carta-interior small {
+    margin-top: 8px;
+    font-size: 11px;
+}
+
+.solapa {
+    position: absolute;
+    inset: 0;
+    background: #e4d0a9;
+    clip-path: polygon(0 0, 50% 60%, 100% 0);
+    z-index: 3;
+    transform-origin: top;
+    transition: transform .8s ease;
+}
+
+.triangulo {
+    position: absolute;
+    inset: 0;
+    background: #d4b986;
+    clip-path: polygon(0 0, 50% 55%, 0 100%);
+    z-index: 2;
+}
+
+.triangulo-derecho {
+    position: absolute;
+    inset: 0;
+    background: #c4a575;
+    clip-path: polygon(100% 0, 100% 100%, 50% 55%);
+    z-index: 2;
+}
+
+.sello {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #92151c;
+    color: #f5d9c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 27px;
+    box-shadow: 0 3px 5px #56302566;
+    transition: opacity .3s;
+}
+
+.sobre.abierto .solapa {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+.sobre.abierto .carta-interior {
+    transform: translateY(-145px);
+    z-index: 4;
+}
+
+.sobre.abierto .sello {
+    opacity: 0;
+}
+
+#abrir {
+    margin-top: 55px;
+    padding: 13px 35px;
+    border: 1px solid #8e1017;
+    border-radius: 3px;
+    color: white;
+    background: #8e1017;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+#abrir:hover {
+    background: #6e0c12;
+}
+
+#abrir:disabled {
+    pointer-events: none;
+}
+
+/* CONTENIDO */
+
+#contenido {
+    display: none;
+    min-height: 100vh;
+    padding: 20px 12px 35px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, #fff8e9, #e8dcc5);
+}
+
+#contenido.visible {
+    display: flex;
+}
+
+.marco {
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: aparecer .8s ease;
+}
+
+#imagenCarta {
+    display: block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 78vh;
+    object-fit: contain;
+    box-shadow: 0 7px 25px #67543b30;
+    transition: opacity .3s;
+}
+
+#siguiente {
+    margin-top: 20px;
+    padding: 12px 35px;
+    background: #8e1017;
+    color: #fff8e9;
+    border: none;
+    border-radius: 3px;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+#siguiente:hover {
+    background: #690c12;
+    transform: translateY(-2px);
+}
+
+#contador {
+    margin-top: 12px;
+    color: #8e1017;
+    font-size: 12px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* CONFETI */
+
+.confeti {
+    position: fixed;
+    top: -15px;
+    width: 9px;
+    height: 13px;
+    z-index: 20;
+    pointer-events: none;
+    animation: caer linear forwards;
+}
+
+@keyframes caer {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* GLOBOS */
+
+.globo {
+    position: fixed;
+    bottom: -130px;
+    width: 43px;
+    height: 55px;
+    border-radius: 50%;
+    z-index: 19;
+    pointer-events: none;
+    animation: subir 5s ease-in forwards;
+}
+
+.globo::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 45px;
+    background: #aa9881;
+    left: 50%;
+    top: 55px;
+}
+
+@keyframes subir {
+    to {
+        transform: translateY(-125vh) translateX(35px);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .marco {
+        min-height: auto;
+    }
+
+    #imagenCarta {
+        max-height: 76vh;
+        max-width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PORTADA -->
+
+<section id="inicio">
+
+    <h1 class="titulo">Para mi quinceañera</h1>
+
+    <div class="sobre" id="sobre">
+
+        <div class="carta-interior">
+            <span>Para mi solecito</span>
+            <small>Con mucho cariño</small>
+        </div>
+
+        <div class="triangulo"></div>
+        <div class="triangulo-derecho"></div>
+        <div class="solapa"></div>
+
+        <div class="sello">♡</div>
+
+    </div>
+
+    <button id="abrir" onclick="abrirCarta()">
+        Abrir mi carta
+    </button>
+
+</section>
+
+<!-- LAS TRES IMÁGENES -->
+
+<section id="contenido">
+
+    <div class="marco">
+        <img id="imagenCarta"
+             src="carta-1.jpeg"
+             alt="Carta de cumpleaños">
+    </div>
+
+    <button id="siguiente" onclick="siguientePagina()">
+        Siguiente →
+    </button>
+
+    <p id="contador">1 / 3</p>
+
+</section>
+
+<script>
+
+const imagenes = [
+    "carta-1.jpeg",
+    "carta-2.jpeg",
+    "carta-3.jpeg"
+];
+
+let paginaActual = 0;
+
+function abrirCarta() {
+
+    const sobre = document.getElementById("sobre");
+    const boton = document.getElementById("abrir");
+
+    sobre.classList.add("abierto");
+    boton.disabled = true;
+    boton.style.opacity = "0";
+
+    lanzarConfeti();
+    lanzarGlobos();
+
+    setTimeout(() => {
+
+        document.getElementById("inicio").style.display = "none";
+
+        document.getElementById("contenido").classList.add("visible");
+
+    }, 1500);
+}
+
+function siguientePagina() {
+
+    if (paginaActual < imagenes.length - 1) {
+
+        paginaActual++;
+
+        const imagen = document.getElementById("imagenCarta");
+
+        imagen.style.opacity = "0";
+
+        setTimeout(() => {
+
+            imagen.src = imagenes[paginaActual];
+
+            imagen.onload = () => {
+                imagen.style.opacity = "1";
+            };
+
+            document.getElementById("contador").textContent =
+                (paginaActual + 1) + " / " + imagenes.length;
+
+        }, 250);
+
+        if (paginaActual === imagenes.length - 1) {
+            document.getElementById("siguiente").style.display = "none";
+        }
+    }
+}
+
+/* CONFETI */
+
+function lanzarConfeti() {
+
+    const colores = [
+        "#94151c",
+        "#d9ad58",
+        "#e7cda0",
+        "#a87946",
+        "#f3e5c9"
+    ];
+
+    for (let i = 0; i < 100; i++) {
+
+        const pieza = document.createElement("div");
+
+        pieza.className = "confeti";
+        pieza.style.left = Math.random() * 100 + "vw";
+
+        pieza.style.backgroundColor =
+            colores[Math.floor(Math.random() * colores.length)];
+
+        pieza.style.animationDuration =
+            (2 + Math.random() * 3) + "s";
+
+        pieza.style.animationDelay =
+            Math.random() * 1.5 + "s";
+
+        document.body.appendChild(pieza);
+
+        setTimeout(() => pieza.remove(), 6000);
+    }
+}
+
+/* GLOBOS */
+
+function lanzarGlobos() {
+
+    const colores = [
+        "#94151c",
+        "#d9b77c",
+        "#b68b70",
+        "#e8c6a1",
+        "#a94b4b"
+    ];
+
+    for (let i = 0; i < 9; i++) {
+
+        const globo = document.createElement("div");
+
+        globo.className = "globo";
+        globo.style.left = (5 + Math.random() * 90) + "vw";
+
+        globo.style.background =
+            colores[Math.floor(Math.random() * colores.length)];
+
+        globo.style.animationDelay = (Math.random() * 2) + "s";
+
+        document.body.appendChild(globo);
+
+        setTimeout(() => globo.remove(), 7500);
+    }
+}
+
+</script>
+
+</body>
+</html>
